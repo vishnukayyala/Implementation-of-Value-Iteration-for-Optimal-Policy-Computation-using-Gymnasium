@@ -1,3 +1,4 @@
+
 # Implementation of Value Iteration for Optimal Policy Computation Using Gymnasium
 
 ## Aim
@@ -40,12 +41,12 @@ The experiment uses the Gymnasium `FrozenLake-v1` environment.
 
 FrozenLake is a grid-based environment where an agent moves across frozen tiles to reach a goal while avoiding holes.
 
-The default environment contains a 4 × 4 grid.
+The default environment contains a 4 x 4 grid.
 
 | Component | Description |
 |---|---|
 | Environment | FrozenLake-v1 |
-| Map size | 4 × 4 |
+| Map size | 4 x 4 |
 | Observation space | 16 discrete states |
 | Action space | 4 discrete actions |
 | Action 0 | Left |
@@ -83,58 +84,65 @@ Unlike Policy Iteration, Value Iteration combines policy evaluation and policy i
 
 The Bellman optimality equation calculates the maximum expected return for each state.
 
-\[
-V^*(s)=\max_a\sum_{s'}P(s'|s,a)
-[R(s,a,s')+\gamma V^*(s')]
-\]
+```text
+V*(s) = MAX over actions [
+    SUM over next states [
+        P(s'|s,a) * (R(s,a,s') + gamma * V*(s'))
+    ]
+]
+```
 
 Where:
 
 | Symbol | Meaning |
 |---|---|
-| \(s\) | Current state |
-| \(a\) | Available action |
-| \(s'\) | Next state |
-| \(P(s'|s,a)\) | Transition probability |
-| \(R(s,a,s')\) | Immediate reward |
-| \(\gamma\) | Discount factor |
-| \(V^*(s)\) | Optimal value of the state |
+| s | Current state |
+| a | Available action |
+| s' | Next state |
+| P(s'\|s,a) | Transition probability |
+| R(s,a,s') | Immediate reward |
+| gamma | Discount factor |
+| V*(s) | Optimal value of the state |
 
 ### Value Iteration Update
 
 The value function is initialized with zeros and updated repeatedly using:
 
-\[
-V_{k+1}(s)=
-\max_a\sum_{s'}P(s'|s,a)
-[R(s,a,s')+\gamma V_k(s')]
-\]
+```text
+V_new(s) = MAX over actions [
+    SUM over next states [
+        P(s'|s,a) * (R(s,a,s') + gamma * V_old(s'))
+    ]
+]
+```
 
-Here, \(k\) represents the current iteration.
+Here, each iteration uses the previous iteration's value estimates to calculate the updated values.
 
 The algorithm continues updating values until the maximum difference between consecutive iterations becomes smaller than a predefined threshold.
 
-\[
-\Delta=\max_s|V_{k+1}(s)-V_k(s)|
-\]
+```text
+Delta = MAX over all states |V_new(s) - V_old(s)|
+```
 
 The convergence condition is:
 
-\[
-\Delta<\theta
-\]
+```text
+Delta < theta
+```
 
-Where \(\theta\) is the convergence threshold.
+Where theta is the convergence threshold.
 
 ### Optimal Policy Extraction
 
 After the value function converges, the optimal policy is obtained by selecting the action with the highest expected return.
 
-\[
-\pi^*(s)=\arg\max_a
-\sum_{s'}P(s'|s,a)
-[R(s,a,s')+\gamma V^*(s')]
-\]
+```text
+pi*(s) = ARGMAX over actions [
+    SUM over next states [
+        P(s'|s,a) * (R(s,a,s') + gamma * V*(s'))
+    ]
+]
+```
 
 The resulting policy specifies the best action for every state.
 
