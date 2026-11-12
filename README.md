@@ -294,6 +294,8 @@ Optimal Policy:
 - D = Down
 - R = Right
 - U = Up
+```
+
 
 ## Result
 
